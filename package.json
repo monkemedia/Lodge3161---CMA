@@ -1,0 +1,32 @@
+{
+  "name": "cma-api",
+  "version": "1.0.0",
+  "description": "A Node.js RESTful API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "npm run production",
+    "production": "NODE_ENV=production, node server.js",
+    "heroku-postbuild": "npm run build"
+  },
+  "keywords": [
+    "node",
+    "restful",
+    "api"
+  ],
+  "author": "Monkemedia",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^2.0.1",
+    "body-parser": "^1.18.3",
+    "contentful-management": "^5.4.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
+    "npm": "^6.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
+  }
+}
