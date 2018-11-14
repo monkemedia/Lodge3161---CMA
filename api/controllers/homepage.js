@@ -14,15 +14,25 @@ const publishHandler = (data, publish) => {
 
 const allPromises = (environment) => {
   const promise = Promise.all([
-    environment.getEntry('7tT62M3wjYWqGMqOyAEoC2'), // Homepage
-    environment.getEntry('3qDt3aaDQQMqAu8yg6C4gq'), // Hero
-    environment.getAsset('QB6clFQsSIiCSgmUK6kiS'), // Hero Image
-    environment.getEntry('1soSRd7k9igWCQCs0m6SoY'), // Content Block 1
-    environment.getAsset('d578aNjuTYScCCSc0aaCY'), // Content Block 1 - Image
-    environment.getEntry('75BP94mOSAqkOYOw8Mqcuy'), // Content Block 1 - Button
-    environment.getEntry('23zHiEl1jSqy68Qk04YCMu'), // Content Block 2
-    environment.getAsset('6IFBR4Iz96cOE4w888A0AG'), // Content Block 2 - Image
-    environment.getEntry('2qhPXlN3msa8sMOa0A4aIW'), // Content Block 2 - Button
+    environment.getEntry('7tT62M3wjYWqGMqOyAEoC2'),  // Homepage
+    environment.getEntry('3qDt3aaDQQMqAu8yg6C4gq'),  // Hero
+    environment.getAsset('QB6clFQsSIiCSgmUK6kiS'),   // Hero Image
+    environment.getEntry('1soSRd7k9igWCQCs0m6SoY'),  // Content Block 1
+    environment.getAsset('d578aNjuTYScCCSc0aaCY'),   // Content Block 1 - Image
+    environment.getEntry('75BP94mOSAqkOYOw8Mqcuy'),  // Content Block 1 - Button
+    environment.getEntry('23zHiEl1jSqy68Qk04YCMu'),  // Content Block 2
+    environment.getAsset('6IFBR4Iz96cOE4w888A0AG'),  // Content Block 2 - Image
+    environment.getEntry('2qhPXlN3msa8sMOa0A4aIW'),  // Content Block 2 - Button
+    environment.getEntry('U8b4USenKguwO8CcWOQyi'),   // Banner
+    environment.getEntry('6egOWOdiDYGu2W6UiWUWGs'),  // Banner Button
+    environment.getAsset('55J5C1Ixe0EcKWgYkYqigW'),  // Banner Image
+    environment.getEntry('2pV2zP4rZu04YsGyKUao4A'),  // Featured Item 1
+    environment.getAsset('6qFiHSYGPYMQSASCg0wWIY'),  // Featured Item 1 - Image
+    environment.getEntry('5P6SUHrIDCUI4ym6Qu2OCE'),  // Featured Item 2
+    environment.getAsset('tE1JMXvr7Eo28meyU4GK6'),   // Featured Item 2 - Image
+    environment.getEntry('1jGDTHj82aYAiq24WY2OeO'),  // Featured Item 3
+    environment.getAsset('12k5n7CGnMkGCmcQScuy6W'),  // Featured Item 3 - Image
+    
   ])
   return promise
 }
@@ -45,7 +55,17 @@ exports.getHomepage = (req, res, next) => {
         contentBlock1Button,
         contentBlock2,
         contentBlock2Image,
-        contentBlock2Button] = entry;
+        contentBlock2Button,
+        banner,
+        bannerButton,
+        bannerImage,
+        featuredItem1,
+        featuredItem1Image,
+        featuredItem2,
+        featuredItem2Image,
+        featuredItem3,
+        featuredItem3Image,
+      ] = entry;
 
       return res.status(200).json({
         homepage: {
@@ -96,6 +116,59 @@ exports.getHomepage = (req, res, next) => {
               path: contentBlock2Button.fields.path[lang]
             }
           },
+          banner: {
+            title: banner.fields.title[lang],
+            subtitle: banner.fields.subtitle[lang],
+            description: banner.fields.description[lang],
+            button: {
+              title: bannerButton.fields.title[lang],
+              path: bannerButton.fields.path[lang]
+            },
+            image: {
+              title: bannerImage.fields.title[lang],
+              file: {
+                url: bannerImage.fields.file[lang].url,
+                fileName: bannerImage.fields.file[lang].fileName,
+                contentType: bannerImage.fields.file[lang].contentType
+              }
+            }
+          },
+          featuredItem1: {
+            title: featuredItem1.fields.title[lang],
+            path: featuredItem1.fields.path[lang],
+            image: {
+              title: featuredItem1Image.fields.title[lang],
+              file: {
+                url: featuredItem1Image.fields.file[lang].url,
+                fileName: featuredItem1Image.fields.file[lang].fileName,
+                contentType: featuredItem1Image.fields.file[lang].contentType
+              }
+            }
+          },
+          featuredItem2: {
+            title: featuredItem2.fields.title[lang],
+            path: featuredItem2.fields.path[lang],
+            image: {
+              title: featuredItem2Image.fields.title[lang],
+              file: {
+                url: featuredItem2Image.fields.file[lang].url,
+                fileName: featuredItem2Image.fields.file[lang].fileName,
+                contentType: featuredItem2Image.fields.file[lang].contentType
+              }
+            }
+          },
+          featuredItem3: {
+            title: featuredItem3.fields.title[lang],
+            path: featuredItem3.fields.path[lang],
+            image: {
+              title: featuredItem3Image.fields.title[lang],
+              file: {
+                url: featuredItem3Image.fields.file[lang].url,
+                fileName: featuredItem3Image.fields.file[lang].fileName,
+                contentType: featuredItem3Image.fields.file[lang].contentType
+              }
+            }
+          }
         }
       });
     })
