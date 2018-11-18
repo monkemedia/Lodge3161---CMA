@@ -1,7 +1,4 @@
 const contentfulManagement = require('contentful-management')
-const client = contentfulManagement.createClient({
-  accessToken: process.env.ACCESS_TOKEN
-})
 
 const lang = 'en-GB'
 
@@ -32,12 +29,16 @@ const allPromises = (environment) => {
     environment.getAsset('tE1JMXvr7Eo28meyU4GK6'),   // Featured Item 2 - Image
     environment.getEntry('1jGDTHj82aYAiq24WY2OeO'),  // Featured Item 3
     environment.getAsset('12k5n7CGnMkGCmcQScuy6W'),  // Featured Item 3 - Image
-    
   ])
   return promise
 }
 
 exports.getHomepage = (req, res, next) => {
+  const token = req.headers.authorization.split('Bearer ')[1]
+  const client = contentfulManagement.createClient({
+    accessToken: token
+  })
+
   client.getSpace('8vncqxfpqkp5')
     .then(space => {
       return space.getEnvironment('master')
