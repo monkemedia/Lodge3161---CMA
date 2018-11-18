@@ -17,6 +17,6 @@ exports.getToken = (req, res, next) => {
       return res.status(200).json(response.data);
     })
     .catch(err => {
-      return err
+      return res.status(500).send({ error: err.data });
     })
 };
