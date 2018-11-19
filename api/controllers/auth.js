@@ -14,7 +14,13 @@ exports.getToken = (req, res, next) => {
 
   axios.post(tokenUrl, queryString.stringify(data))
     .then(response => {
-      return res.status(200).json(response.data);
+      if (response.data.access_token) {
+        return res.status(200).json(response.data);
+      }
+
+      return res.status(500).send({ 
+        error: 'Whoops! You\'ve entered an incorrect email address or password. Please check your details and try again' 
+      });
     })
     .catch(err => {
       return res.status(500).send({ error: err.data });
