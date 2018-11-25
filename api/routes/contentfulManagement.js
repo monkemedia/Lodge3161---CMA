@@ -4,7 +4,8 @@ const router = express.Router()
 const UserController = require('../controllers/authorization/user.js')
 
 const HomepageMainController = require('../controllers/homepage/main.js')
-const HomepageHeroController = require('../controllers/homepage/hero.js')
+const HomepageHeroBasicController = require('../controllers/homepage/hero/basic.js')
+const HomepageHeroMediaController = require('../controllers/homepage/hero/media.js')
 
 /* AUTHORIZATION USER */
 router.get('/user', UserController.getUser)
@@ -13,7 +14,9 @@ router.get('/user', UserController.getUser)
 router.get('/homepage/main', HomepageMainController.fetchData)
 router.put('/homepage/main', HomepageMainController.updateData)
 
-router.get('/homepage/hero', HomepageHeroController.fetchData)
-router.put('/homepage/hero', HomepageHeroController.updateData)
+router.get('/homepage/hero/basic', HomepageHeroBasicController.fetchData)
+router.put('/homepage/hero/basic', HomepageHeroBasicController.updateData)
+router.get('/homepage/hero/media', HomepageHeroMediaController.fetchData)
+router.put('/homepage/hero/media', HomepageHeroMediaController.updateData)
 
 module.exports = router

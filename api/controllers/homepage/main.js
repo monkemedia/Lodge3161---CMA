@@ -68,6 +68,7 @@ exports.updateData = (req, res, next) => {
     .then(entry => {
       // Homepage
       entry.fields.title[lang] = req.body.title
+      entry.fields.description[lang] = req.body.description
 
       return publishHandler(entry, isPublishable)
     })
