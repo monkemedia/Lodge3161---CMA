@@ -51,7 +51,8 @@ exports.fetchData = (req, res, next) => {
           metadata: {
             version: heroImage.sys.version,
             publishedVersion: heroImage.sys.publishedVersion,
-            updatedAt: heroImage.sys.updatedAt
+            updatedAt: heroImage.sys.updatedAt,
+            id: heroImage.sys.id
           },
           fields: {
             image: {
