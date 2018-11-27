@@ -10,7 +10,9 @@ const cors = require('cors');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+  limit: '50mb', extended: true
+}));
 app.use(cors());
 
 app.use((req, res, next) => {

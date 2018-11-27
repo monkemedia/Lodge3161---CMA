@@ -13,7 +13,7 @@ const HomepageHeroMediaController = require('../controllers/homepage/hero/media.
 router.get('/user', UserController.getUser)
 
 /* ASSETS */
-router.delete('/assets', AssetsController.deleteData)
+router.post('/assets', AssetsController.createAsset)
 
 /* HOMEPAGE */
 router.get('/homepage/main', HomepageMainController.fetchData)

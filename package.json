@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
+    "base64-to-image": "^1.0.2",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
     "contentful-management": "^5.4.0",
