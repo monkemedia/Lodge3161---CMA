@@ -25,6 +25,7 @@
     "contentful-management": "^5.4.0",
     "cors": "^2.8.4",
     "express": "^4.16.3",
+    "find-remove": "^1.2.2",
     "morgan": "^1.9.0",
     "npm": "^6.4.1",
     "query-string": "^6.2.0"
