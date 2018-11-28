@@ -20,8 +20,7 @@ const publishHandler = (data, publish) => {
 
 const allPromises = (environment) => {
   const promise = Promise.all([
-    environment.getAsset('3UV3zH6fXq06mSMIKEMgcG'),  // Hero Image
-    // environment.getAsset('2Do8VFgtjuUGEu8uCyw6Oq')   // Hero Image Mobile
+    environment.getAsset('pEJywsuGxam0K8kqmsKa0')  // Hero Image
   ])
   return promise
 }
