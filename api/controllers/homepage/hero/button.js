@@ -24,13 +24,13 @@ exports.fetchData = (req, res, next) => {
       return res.status(200).json({
         data: {
           metadata: {
-            version: main.sys.version,
-            publishedVersion: main.sys.publishedVersion,
-            updatedAt: main.sys.updatedAt
+            version: button.sys.version,
+            publishedVersion: button.sys.publishedVersion,
+            updatedAt: button.sys.updatedAt
           },
           fields: {
-            title: main.fields.title[lang],
-            path: main.fields.path[lang]
+            title: button.fields.title[lang],
+            path: button.fields.path[lang]
           }
         }
       });
