@@ -1,32 +1,24 @@
-const contentfulManagement = require('contentful-management')
-const fs = require('fs')
-const lang = 'en-GB'
-const base64ToImage = require('base64-to-image')
 const path = require('path')
 const appRoot = require('app-root-path')
+const client = require(appRoot + '/utils/initClient.js')
 const library = require(appRoot + '/utils/library.js')
+const base64ToImage = require('base64-to-image')
+const fs = require('fs')
+const lang = process.env.LOCALE
 
 exports.createAsset = (req, res, next) => {
-  if (!req.headers.authorization) {
-    return res.status(500).send({ error: 'Need authorization header' });
-  }
-
-  const token = req.headers.authorization.split('Bearer ')[1]
-  const client = contentfulManagement.createClient({
-    accessToken: token
-  })
-
   const url = req.body.file.url
   const contentType = req.body.file.contentType
+  const title = req.body.title
   const fileName = req.body.file.fileName  
   const oldAssetId = req.query.oldAssetId
   const isPublishable = req.query.publishable === 'true' ? true : false
-
-  const base = base64ToImage(url, './public/uploads/')
+  const base = base64ToImage(url, appRoot + '/public/uploads/')
   const fullPath = path.resolve(__dirname, '../../../public/uploads/' + base.fileName)
 
-  client.getSpace('8vncqxfpqkp5')
+  client.initClient(req, res)
     .then(space => {
+      console.log('space');
       return space.createUpload({
         file: fs.readFileSync(fullPath)
       })
@@ -35,7 +27,7 @@ exports.createAsset = (req, res, next) => {
         return space.createAsset({
           fields: {
             title: {
-              [lang]: fileName
+              [lang]: title
             },
             file: {
               [lang]: {
@@ -57,13 +49,16 @@ exports.createAsset = (req, res, next) => {
         return asset.processForLocale(lang, { processingCheckWait: 2000 });
       })
       .then(asset => {
-        return asset.publish()
+        return library.publishHandler([asset], isPublishable)
       })
       .then(published => {
-        const title = published.fields.file[lang].fileName
-        const url = published.fields.file[lang].url
-        const fileName = title
-        const contentType = published.fields.file[lang].contentType
+        const [image] = published
+        const title = image.fields.title[lang]
+        const url = image.fields.file[lang].url
+        const fileName = image.fields.file[lang].fileName
+        const contentType = image.fields.file[lang].contentType
+
+        image.delete() // Deletes uploaded image as a copy of it has already been made. We dont want 2 of the same image
 
         return space.getAsset(oldAssetId)
           .then(asset => {
