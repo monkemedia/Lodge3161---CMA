@@ -18,7 +18,6 @@ exports.createAsset = (req, res, next) => {
 
   client.initClient(req, res)
     .then(space => {
-      console.log('space');
       return space.createUpload({
         file: fs.readFileSync(fullPath)
       })

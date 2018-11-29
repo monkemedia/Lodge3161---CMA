@@ -10,8 +10,6 @@ const allPromises = (environment) => {
   return promise
 }
 
-console.log('monk');
-
 exports.fetchData = (req, res, next) => {
   client.initClient(req, res)
     .then(space => {
