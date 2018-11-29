@@ -1,23 +1,7 @@
 const contentfulManagement = require('contentful-management')
-
-const lang = 'en-GB'
-
-const publishHandler = (data, publish) => {
-  const promises = []
-
-  data.forEach(d => {
-    if (publish) {
-      return promises.push(d.publish())
-    }
-    return promises.push(d.update())
-  })
-
-  return Promise.all(promises)
-    .then(res => {
-      console.log('res', res);
-      return res
-    })
-}
+const appRoot = require('app-root-path')
+const library = require(appRoot + '/utils/library.js')
+const lang = process.env.LOCALE
 
 const allPromises = (environment) => {
   const promise = Promise.all([
@@ -89,7 +73,7 @@ exports.updateData = (req, res, next) => {
       main.fields.title[lang] = req.body.title
       main.fields.subtitle[lang] = req.body.subtitle
 
-      return publishHandler([main], isPublishable)
+      return library.publishHandler([main], isPublishable)
     })
     .then(updated => {
       const [main] = updated

@@ -3,22 +3,8 @@ const fs = require('fs')
 const lang = 'en-GB'
 const base64ToImage = require('base64-to-image')
 const path = require('path')
-
-const publishHandler = (data, publish) => {
-  const promises = []
-
-  data.forEach(d => {
-    if (publish) {
-      return promises.push(d.publish())
-    }
-    return promises.push(d.update())
-  })
-
-  return Promise.all(promises)
-    .then(res => {
-      return res
-    })
-}
+const appRoot = require('app-root-path')
+const library = require(appRoot + '/utils/library.js')
 
 exports.createAsset = (req, res, next) => {
   if (!req.headers.authorization) {
@@ -86,7 +72,7 @@ exports.createAsset = (req, res, next) => {
             asset.fields.file[lang].fileName = fileName
             asset.fields.file[lang].contentType = contentType
 
-            return publishHandler([asset], isPublishable)
+            return library.publishHandler([asset], isPublishable)
           })
           .then(entry => {
             const [image] = entry

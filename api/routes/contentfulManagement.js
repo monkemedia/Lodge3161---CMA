@@ -22,6 +22,6 @@ router.put('/homepage/main', HomepageMainController.updateData)
 router.get('/homepage/hero/basic', HomepageHeroBasicController.fetchData)
 router.put('/homepage/hero/basic', HomepageHeroBasicController.updateData)
 router.get('/homepage/hero/media', HomepageHeroMediaController.fetchData)
-router.put('/homepage/hero/media', HomepageHeroMediaController.updateData)
+
 
 module.exports = router

@@ -1,25 +1,10 @@
-const contentfulManagement = require('contentful-management')
-
-const lang = 'en-GB'
-
-const publishHandler = (data, publish) => {
-  if (publish) {
-    return data.publish()
-  }
-  return data.update()
-}
+const appRoot = require('app-root-path')
+const client = require(appRoot + '/utils/initClient.js')
+const library = require(appRoot + '/utils/library.js')
+const lang = process.env.LOCALE
 
 exports.fetchData = (req, res, next) => {
-  if (!req.headers.authorization) {
-    return res.status(500).send({ error: 'Need authorization header' });
-  }
-
-  const token = req.headers.authorization.split('Bearer ')[1]
-  const client = contentfulManagement.createClient({
-    accessToken: token
-  })
-
-  client.getSpace('8vncqxfpqkp5')
+  client.initClient(req, res)
     .then(space => {
       return space.getEnvironment('master')
     })
@@ -70,14 +55,15 @@ exports.updateData = (req, res, next) => {
       entry.fields.title[lang] = req.body.title
       entry.fields.description[lang] = req.body.description
 
-      return publishHandler(entry, isPublishable)
+      return library.publishHandler([entry], isPublishable)
     })
     .then(updated => {
+      const [main] = updated
       return res.status(200).json({
         metadata: {
-          version: updated.sys.version,
-          publishedVersion: updated.sys.publishedVersion,
-          updatedAt: updated.sys.updatedAt
+          version: main.sys.version,
+          publishedVersion: main.sys.publishedVersion,
+          updatedAt: main.sys.updatedAt
         },
         message: 'Your work has been saved'
       });
