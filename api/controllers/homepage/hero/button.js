@@ -40,44 +40,36 @@ exports.fetchData = (req, res, next) => {
     });
 };
 
-// exports.updateData = (req, res, next) => {
-//   if (!req.headers.authorization) {
-//     return res.status(500).send({ error: 'Need authorization header' });
-//   }
+exports.updateData = (req, res, next) => {
+  const isPublishable = req.query.publishable === 'true' ? true : false
 
-//   const token = req.headers.authorization.split('Bearer ')[1]
-//   const client = contentfulManagement.createClient({
-//     accessToken: token
-//   })
-//   const isPublishable = req.query.publishable === 'true' ? true : false
+  client.initClient(req, res)
+    .then(space => {
+      return space.getEnvironment('master')
+    })
+    .then(environment => {
+      return allPromises(environment)
+    })
+    .then(entry => {
+      const [main] = entry
 
-//   client.getSpace('8vncqxfpqkp5')
-//     .then(space => {
-//       return space.getEnvironment('master')
-//     })
-//     .then(environment => {
-//       return allPromises(environment)
-//     })
-//     .then(entry => {
-//       const [main] = entry
+      main.fields.title[lang] = req.body.title
+      main.fields.path[lang] = req.body.path
 
-//       main.fields.title[lang] = req.body.title
-//       main.fields.subtitle[lang] = req.body.subtitle
-
-//       return library.publishHandler([main], isPublishable)
-//     })
-//     .then(updated => {
-//       const [main] = updated
-//       return res.status(200).json({
-//         metadata: {
-//           version: main.sys.version,
-//           publishedVersion: main.sys.publishedVersion,
-//           updatedAt: main.sys.updatedAt
-//         },
-//         message: 'Your work has been saved'
-//       });
-//     })
-//     .catch(err => {
-//       res.status(500).send({ error: err });
-//     });
-// };
+      return library.publishHandler([main], isPublishable)
+    })
+    .then(updated => {
+      const [main] = updated
+      return res.status(200).json({
+        metadata: {
+          version: main.sys.version,
+          publishedVersion: main.sys.publishedVersion,
+          updatedAt: main.sys.updatedAt
+        },
+        message: 'Your work has been saved'
+      });
+    })
+    .catch(err => {
+      res.status(500).send({ error: err });
+    });
+};

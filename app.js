@@ -4,11 +4,14 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const findRemoveSync = require('find-remove')
 
-const contentfulManagementRoutes = require('./api/routes/contentfulManagement')
+const userRoutes = require('./api/routes/user.js')
+const assetsRoutes = require('./api/routes/assets.js')
+const homepageRoutes = require('./api/routes/homepage.js')
 const authRoutes = require('./api/routes/auth.js')
 
 const cors = require('cors')
 
+// REMOVES IMAGES FROM PUBLIC FOLDER WHEN THEY ARE OVER 1 HOUR OLD
 const result = findRemoveSync('./public/uploads', {
   age: {
     seconds: 3600
@@ -40,7 +43,9 @@ app.use((req, res, next) => {
 })
 
 // Routes which should handle requests
-app.use('/api/v1/contentful-management', contentfulManagementRoutes)
+app.use('/api/v1/user', userRoutes)
+app.use('/api/v1/assets', assetsRoutes)
+app.use('/api/v1/homepage', homepageRoutes)
 app.use('/api/v1/auth', authRoutes)
 
 app.use((req, res, next) => {

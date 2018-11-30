@@ -9,6 +9,7 @@ const HomepageMainController = require('../controllers/homepage/main.js')
 const HomepageHeroBasicController = require('../controllers/homepage/hero/basic.js')
 const HomepageHeroMediaController = require('../controllers/homepage/hero/media.js')
 const HomepageHeroButtonController = require('../controllers/homepage/hero/button.js')
+const HomepageCBTBasicController = require('../controllers/homepage/contentBlockTop/basic.js')
 
 /* AUTHORIZATION USER */
 router.get('/user', UserController.getUser)
@@ -24,6 +25,8 @@ router.get('/homepage/hero/basic', HomepageHeroBasicController.fetchData)
 router.put('/homepage/hero/basic', HomepageHeroBasicController.updateData)
 router.get('/homepage/hero/media', HomepageHeroMediaController.fetchData)
 router.get('/homepage/hero/button', HomepageHeroButtonController.fetchData)
+
+router.get('/homepage/content-block-top/basic', HomepageCBTBasicController.fetchData)
 
 
 module.exports = router

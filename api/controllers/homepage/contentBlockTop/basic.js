@@ -5,7 +5,7 @@ const lang = process.env.LOCALE
 
 const allPromises = (environment) => {
   const promise = Promise.all([
-    environment.getEntry('3qDt3aaDQQMqAu8yg6C4gq')  // Hero
+    environment.getEntry('7tT62M3wjYWqGMqOyAEoC2')  // Content Block Top
   ])
   return promise
 }
@@ -30,7 +30,7 @@ exports.fetchData = (req, res, next) => {
           },
           fields: {
             title: main.fields.title[lang],
-            subtitle: main.fields.subtitle[lang]
+            slug: main.fields.slug[lang]
           }
         }
       });
@@ -41,7 +41,17 @@ exports.fetchData = (req, res, next) => {
 };
 
 exports.updateData = (req, res, next) => {
-  client.initClient(req, res)
+  if (!req.headers.authorization) {
+    return res.status(500).send({ error: 'Need authorization header' });
+  }
+
+  const token = req.headers.authorization.split('Bearer ')[1]
+  const client = contentfulManagement.createClient({
+    accessToken: token
+  })
+  const isPublishable = req.query.publishable === 'true' ? true : false
+
+  client.getSpace('8vncqxfpqkp5')
     .then(space => {
       return space.getEnvironment('master')
     })
@@ -52,7 +62,7 @@ exports.updateData = (req, res, next) => {
       const [main] = entry
 
       main.fields.title[lang] = req.body.title
-      main.fields.subtitle[lang] = req.body.subtitle
+      main.fields.slug[lang] = req.body.slug
 
       return library.publishHandler([main], isPublishable)
     })
