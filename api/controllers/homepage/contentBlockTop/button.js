@@ -5,7 +5,7 @@ const lang = process.env.LOCALE
 
 const allPromises = (environment) => {
   const promise = Promise.all([
-    environment.getEntry('7tT62M3wjYWqGMqOyAEoC2')  // Content Block Top
+    environment.getEntry('75BP94mOSAqkOYOw8Mqcuy')  // Content Block Top Button
   ])
   return promise
 }
@@ -30,7 +30,7 @@ exports.fetchData = (req, res, next) => {
           },
           fields: {
             title: main.fields.title[lang],
-            description: main.fields.description[lang]
+            path: main.fields.path[lang]
           }
         }
       });
