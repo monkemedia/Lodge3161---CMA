@@ -1,23 +1,10 @@
 const appRoot = require('app-root-path')
-const client = require(appRoot + '/utils/initClient.js')
 const library = require(appRoot + '/utils/library.js')
 const lang = process.env.LOCALE
-
-const allPromises = (environment) => {
-  const promise = Promise.all([
-    environment.getAsset('pEJywsuGxam0K8kqmsKa0')  // Hero Image
-  ])
-  return promise
-}
+const entryId = 'pEJywsuGxam0K8kqmsKa0' // Hero Media
 
 exports.fetchData = (req, res, next) => {
-  client.initClient(req, res)
-    .then(space => {
-      return space.getEnvironment('master')
-    })
-    .then(environment => {
-      return allPromises(environment)
-    })
+  library.fetchAssetData(req, res, entryId)
     .then(entry => {
       const [heroImage] = entry
 
@@ -43,7 +30,6 @@ exports.fetchData = (req, res, next) => {
       });
     })
     .catch(err => {
-      res.status(500).send({ error: err })
-    })
+      res.status(500).send({ error: err });
+    });
 };
-
