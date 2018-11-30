@@ -41,6 +41,8 @@ exports.fetchData = (req, res, next) => {
 };
 
 exports.updateData = (req, res, next) => {
+  const isPublishable = req.query.publishable === 'true' ? true : false
+
   client.initClient(req, res)
     .then(space => {
       return space.getEnvironment('master')
@@ -58,6 +60,7 @@ exports.updateData = (req, res, next) => {
     })
     .then(updated => {
       const [main] = updated
+
       return res.status(200).json({
         metadata: {
           version: main.sys.version,
