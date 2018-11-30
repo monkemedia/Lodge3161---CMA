@@ -28,5 +28,30 @@ exports.fetchData = (req, res, next) => {
 };
 
 exports.updateData = (req, res, next) => {
-  libray.updateData(req, res, entryId)
-};
+  const isPublishable = req.query.publishable === 'true' ? true : false
+
+  library.updateData(req, res, entryId)
+    .then(entry => {
+      const [main] = entry
+
+      main.fields.title[lang] = req.body.title
+      main.fields.subtitle[lang] = req.body.subtitle
+
+      return library.publishHandler([main], isPublishable)
+    })
+    .then(updated => {
+      const [main] = updated
+
+      return res.status(200).json({
+        metadata: {
+          version: main.sys.version,
+          publishedVersion: main.sys.publishedVersion,
+          updatedAt: main.sys.updatedAt
+        },
+        message: 'Your work has been saved'
+      })
+    })
+    .catch(err => {
+      res.status(500).send({ error: err });
+    })
+}

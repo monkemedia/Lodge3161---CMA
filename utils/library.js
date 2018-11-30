@@ -15,22 +15,6 @@ const allAssetPromises = (environment, entryId) => {
   return promise
 }
 
-const publishHandler = (data, publish) => {
-  const promises = []
-
-  data.forEach(d => {
-    if (publish) {
-      return promises.push(d.publish())
-    }
-    return promises.push(d.update())
-  })
-
-  return Promise.all(promises)
-    .then(res => {
-      return res
-    })
-}
-
 exports.publishHandler = (data, publish) => {
   const promises = []
 
@@ -68,8 +52,6 @@ exports.fetchAssetData = (req, res, entryId) => {
 };
 
 exports.updateData = (req, res, entryId) => {
-  const isPublishable = req.query.publishable === 'true' ? true : false
-
   return client.initClient(req, res)
     .then(space => {
       return space.getEnvironment('master')
@@ -77,27 +59,4 @@ exports.updateData = (req, res, entryId) => {
     .then(environment => {
       return allPromises(environment, entryId)
     })
-    .then(entry => {
-      const [main] = entry
-
-      main.fields.title[lang] = req.body.title
-      main.fields.subtitle[lang] = req.body.subtitle
-
-      return publishHandler([main], isPublishable)
-    })
-    .then(updated => {
-      const [main] = updated
-
-      return res.status(200).json({
-        metadata: {
-          version: main.sys.version,
-          publishedVersion: main.sys.publishedVersion,
-          updatedAt: main.sys.updatedAt
-        },
-        message: 'Your work has been saved'
-      });
-    })
-    .catch(err => {
-      res.status(500).send({ error: err });
-    });
 };
