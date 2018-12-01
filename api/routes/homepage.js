@@ -6,6 +6,7 @@ const HomepageHeroMediaController = require('../controllers/homepage/hero/media.
 const HomepageHeroButtonController = require('../controllers/homepage/hero/button.js')
 const HomepageCBTBasicController = require('../controllers/homepage/contentBlockTop/basic.js')
 const HomepageCBTButtonController = require('../controllers/homepage/contentBlockTop/button.js')
+const HomepageCBTMediaController = require('../controllers/homepage/contentBlockTop/media.js')
 
 router.get('/main', HomepageMainController.fetchData)
 router.put('/main', HomepageMainController.updateData)
@@ -20,5 +21,6 @@ router.get('/content-block-top/basic', HomepageCBTBasicController.fetchData)
 router.put('/content-block-top/basic', HomepageCBTBasicController.updateData)
 router.get('/content-block-top/button', HomepageCBTButtonController.fetchData)
 router.put('/content-block-top/button', HomepageCBTButtonController.updateData)
+router.get('/content-block-top/media', HomepageCBTMediaController.fetchData)
 
 module.exports = router
