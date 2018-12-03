@@ -1,6 +1,12 @@
 const appRoot = require('app-root-path')
 const client = require(appRoot + '/utils/initClient.js')
 
+// exports.allPromises = (environment, entryId) => {
+//   return promise = Promise.all([
+//     environment.getEntry(entryId)
+//   ])
+// }
+
 const allPromises = (environment, entryId) => {
   const promise = Promise.all([
     environment.getEntry(entryId)
@@ -31,13 +37,18 @@ exports.publishHandler = (data, publish) => {
     })
 }
 
-exports.fetchData = (req, res, entryId) => {
+exports.fetchData = (req, res, isMedia) => {
+  console.log('isMedia', isMedia);
+  const entryId = req.query.entryId
   return client.initClient(req, res)
     .then(space => {
       return space.getEnvironment('master')
     })
     .then(environment => {
-      return allPromises(environment, entryId)
+      if (!isMedia) {
+        return allPromises(environment, entryId)
+      }
+      return allAssetPromises(environment, entryId)
     })
 };
 

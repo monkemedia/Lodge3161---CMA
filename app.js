@@ -9,6 +9,9 @@ const assetsRoutes = require('./api/routes/assets.js')
 const homepageRoutes = require('./api/routes/homepage.js')
 const authRoutes = require('./api/routes/auth.js')
 
+const fetchRoutes = require('./api/routes/fetch.js')
+const updateRoutes = require('./api/routes/update.js')
+
 const cors = require('cors')
 
 // REMOVES IMAGES FROM PUBLIC FOLDER WHEN THEY ARE OVER 1 HOUR OLD
@@ -47,6 +50,9 @@ app.use('/api/v1/user', userRoutes)
 app.use('/api/v1/assets', assetsRoutes)
 app.use('/api/v1/homepage', homepageRoutes)
 app.use('/api/v1/auth', authRoutes)
+
+app.use('/api/v1/fetch', fetchRoutes)
+app.use('/api/v1/update', updateRoutes)
 
 app.use((req, res, next) => {
   const error = new Error('Not found')
