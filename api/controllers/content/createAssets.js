@@ -1,7 +1,6 @@
 const path = require('path')
 const appRoot = require('app-root-path')
 const client = require(appRoot + '/utils/initClient.js')
-const library = require(appRoot + '/utils/library.js')
 const base64ToImage = require('base64-to-image')
 const fs = require('fs')
 const lang = process.env.LOCALE
@@ -11,10 +10,10 @@ exports.createAsset = (req, res, next) => {
   const contentType = req.body.file.contentType
   const title = req.body.title
   const fileName = req.body.file.fileName  
-  const oldAssetId = req.query.oldAssetId
+  const entryId = req.query.entryId
   const isPublishable = req.query.publishable === 'true' ? true : false
   const base = base64ToImage(url, appRoot + '/public/uploads/')
-  const fullPath = path.resolve(__dirname, '../../../public/uploads/' + base.fileName)
+  const fullPath = path.resolve(appRoot + '/public/uploads/' + base.fileName)
 
   client.initClient(req, res)
     .then(space => {
@@ -48,35 +47,36 @@ exports.createAsset = (req, res, next) => {
         return asset.processForLocale(lang, { processingCheckWait: 2000 });
       })
       .then(asset => {
-        return library.publishHandler([asset], isPublishable)
+        return asset.update()
       })
       .then(published => {
-        const [image] = published
-        const title = image.fields.title[lang]
-        const url = image.fields.file[lang].url
-        const fileName = image.fields.file[lang].fileName
-        const contentType = image.fields.file[lang].contentType
+        const title = published.fields.title[lang]
+        const url = published.fields.file[lang].url
+        const fileName = published.fields.file[lang].fileName
+        const contentType = published.fields.file[lang].contentType
 
-        image.delete() // Deletes uploaded image as a copy of it has already been made. We dont want 2 of the same image
+        published.delete() // Deletes uploaded image as a copy of it has already been made. We dont want 2 of the same image
 
-        return space.getAsset(oldAssetId)
+        return space.getAsset(entryId)
           .then(asset => {
             asset.fields.title[lang] = title
             asset.fields.file[lang].url = url
             asset.fields.file[lang].fileName = fileName
             asset.fields.file[lang].contentType = contentType
 
-            return library.publishHandler([asset], isPublishable)
+            if (isPublishable) {
+              return asset.publish()
+            }
+            return asset.update()
           })
           .then(entry => {
-            const [image] = entry
             return res.status(200).json({
               data: {
                 metadata: {
-                  version: image.sys.version,
-                  publishedVersion: image.sys.publishedVersion,
-                  updatedAt: image.sys.updatedAt,
-                  id: image.sys.id
+                  version: entry.sys.version,
+                  publishedVersion: entry.sys.publishedVersion,
+                  updatedAt: entry.sys.updatedAt,
+                  id: entry.sys.id
                 }
               }
             })
@@ -84,7 +84,6 @@ exports.createAsset = (req, res, next) => {
       })
     })
     .catch(err => {
-      console.log('err', err);
-      return res.status(500).json({ error: err.message });
+      res.status(500).send({ error: err })
     })
 }

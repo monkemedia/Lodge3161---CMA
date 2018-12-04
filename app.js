@@ -5,12 +5,9 @@ const bodyParser = require('body-parser')
 const findRemoveSync = require('find-remove')
 
 const userRoutes = require('./api/routes/user.js')
-const assetsRoutes = require('./api/routes/assets.js')
-const homepageRoutes = require('./api/routes/homepage.js')
 const authRoutes = require('./api/routes/auth.js')
 
-const fetchRoutes = require('./api/routes/fetch.js')
-const updateRoutes = require('./api/routes/update.js')
+const contentRoutes = require('./api/routes/content.js')
 
 const cors = require('cors')
 
@@ -47,12 +44,11 @@ app.use((req, res, next) => {
 
 // Routes which should handle requests
 app.use('/api/v1/user', userRoutes)
-app.use('/api/v1/assets', assetsRoutes)
-app.use('/api/v1/homepage', homepageRoutes)
 app.use('/api/v1/auth', authRoutes)
 
-app.use('/api/v1/fetch', fetchRoutes)
-app.use('/api/v1/update', updateRoutes)
+app.use('/api/v1/fetch', contentRoutes)
+app.use('/api/v1/update', contentRoutes)
+app.use('/api/v1/createAsset', contentRoutes)
 
 app.use((req, res, next) => {
   const error = new Error('Not found')
