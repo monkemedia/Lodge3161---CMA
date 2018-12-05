@@ -11,18 +11,16 @@ exports.createAsset = (req, res, next) => {
   const entryId = req.query.entryId
   const isPublishable = req.query.publishable === 'true' ? true : false
 
+  // If user updates title ONLY
   if (url.includes('images.ctfassets.net')) {
     return client.initClient(req, res)
       .then(space => {
         return space.getEnvironment('master')
       })
       .then(environment => {
-        console.log('environment', environment);
-        console.log('entryId', entryId);
         return environment.getAsset(entryId)
       })
       .then(entry => {
-        console.log('ENTRY', entry);
         entry.fields.title[lang] = title
 
         if (isPublishable) {
@@ -32,14 +30,13 @@ exports.createAsset = (req, res, next) => {
       })
       .then(updated => {
         return res.status(200).json({
-          data: {
-            metadata: {
-              version: updated.sys.version,
-              publishedVersion: updated.sys.publishedVersion,
-              updatedAt: updated.sys.updatedAt,
-              id: updated.sys.id
-            }
-          }
+          metadata: {
+            version: updated.sys.version,
+            publishedVersion: updated.sys.publishedVersion,
+            updatedAt: updated.sys.updatedAt,
+            id: updated.sys.id
+          },
+          message: 'Your work has been saved'
         })
       })
       .catch(err => {
@@ -106,16 +103,15 @@ exports.createAsset = (req, res, next) => {
             }
             return asset.update()
           })
-          .then(entry => {
+          .then(updated => {
             return res.status(200).json({
-              data: {
-                metadata: {
-                  version: entry.sys.version,
-                  publishedVersion: entry.sys.publishedVersion,
-                  updatedAt: entry.sys.updatedAt,
-                  id: entry.sys.id
-                }
-              }
+              metadata: {
+                version: updated.sys.version,
+                publishedVersion: updated.sys.publishedVersion,
+                updatedAt: updated.sys.updatedAt,
+                id: updated.sys.id
+              },
+              message: 'Your work has been saved'
             })
           })
       })
