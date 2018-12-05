@@ -7,11 +7,48 @@ const lang = process.env.LOCALE
 
 exports.createAsset = (req, res, next) => {
   const url = req.body.file.url
-  const contentType = req.body.file.contentType
   const title = req.body.title
-  const fileName = req.body.file.fileName  
   const entryId = req.query.entryId
   const isPublishable = req.query.publishable === 'true' ? true : false
+
+  if (url.includes('images.ctfassets.net')) {
+    return client.initClient(req, res)
+      .then(space => {
+        return space.getEnvironment('master')
+      })
+      .then(environment => {
+        console.log('environment', environment);
+        console.log('entryId', entryId);
+        return environment.getAsset(entryId)
+      })
+      .then(entry => {
+        console.log('ENTRY', entry);
+        entry.fields.title[lang] = title
+
+        if (isPublishable) {
+          return entry.publish()
+        }
+        return entry.update()
+      })
+      .then(updated => {
+        return res.status(200).json({
+          data: {
+            metadata: {
+              version: updated.sys.version,
+              publishedVersion: updated.sys.publishedVersion,
+              updatedAt: updated.sys.updatedAt,
+              id: updated.sys.id
+            }
+          }
+        })
+      })
+      .catch(err => {
+        res.status(500).send({ error: err })
+      })
+  }
+
+  const contentType = req.body.file.contentType
+  const fileName = req.body.file.fileName  
   const base = base64ToImage(url, appRoot + '/public/uploads/')
   const fullPath = path.resolve(appRoot + '/public/uploads/' + base.fileName)
 
