@@ -4,8 +4,6 @@ exports.fetchData = (req, res, next) => {
   const entryId = req.query.entryId
   const contentType = req.query.contentType
 
-  console.log('contentType', contentType);
-
   client.initClient(req, res)
     .then(space => {
       return space.getEnvironment('master')
@@ -23,7 +21,7 @@ exports.fetchData = (req, res, next) => {
           if (Array.isArray(fields[key]['en-GB'])) {
             for (let i = 0; i < fields[key]['en-GB'].length; i++) {
               newArray.push({
-                title: key + ' ' + [i + 1],
+                title: `${key} ${i + 1}`,
                 id: fields[key]['en-GB'][i].sys.id
               })
             }
