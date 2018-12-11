@@ -16,15 +16,13 @@ exports.fetchData = (req, res, next) => {
     })
     .then(entry => {
       return res.status(200).json({
-        data: {
-          metadata: {
-            version: entry.sys.version,
-            publishedVersion: entry.sys.publishedVersion,
-            updatedAt: entry.sys.updatedAt,
-            id: entry.sys.id
-          },
-          fields: entry.fields
-        }
+        metadata: {
+          version: entry.sys.version,
+          publishedVersion: entry.sys.publishedVersion,
+          updatedAt: entry.sys.updatedAt,
+          id: entry.sys.id
+        },
+        fields: entry.fields
       });
     })
     .catch(err => {
