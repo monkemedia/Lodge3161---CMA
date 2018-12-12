@@ -14,6 +14,7 @@ exports.updateData = (req, res, next) => {
     })
     .then(entry => {
       Object.keys(req.body).forEach((key) => {
+        if (req.body[key] === null) { return } // Stops submitting data if equal to null
         entry.fields[key][lang] = req.body[key]
       });
 
