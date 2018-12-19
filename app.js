@@ -48,7 +48,7 @@ app.use('/api/v1/auth', authRoutes)
 
 app.use('/api/v1/fetch', contentRoutes)
 app.use('/api/v1/update', contentRoutes)
-app.use('/api/v1/createAsset', contentRoutes)
+app.use('/api/v1/create', contentRoutes)
 
 app.use((req, res, next) => {
   const error = new Error('Not found')
