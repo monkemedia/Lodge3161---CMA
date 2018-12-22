@@ -10,148 +10,160 @@ exports.createData = (req, res, next) => {
   const fullPath = path.resolve(appRoot + '/public/uploads/' + base.fileName)
   const fs = require('fs')
 
-  console.log('url', url);
-  console.log('fileName', fileName);
-
   client.initClient(req, res)
     .then(space => {
       return space.getEnvironment('master')
-      .then(environment => {
-        // Create pageMeta first
-        return environment.createEntry('pageMeta', {
-          fields: {
-            title: {
-              [lang]: req.body.pageMeta.title
-            },
-            description: {
-              [lang]: req.body.pageMeta.description
-            }
-          }
-        })
-        .then(pageMeta => {
-          return environment.createEntry('button', {
+        .then(environment => {
+          // Create pageMeta first
+          return environment.createEntry('pageMeta', {
             fields: {
               title: {
-                [lang]: req.body.hero.cta.title
+                [lang]: req.body.pageMeta.title
               },
-              path: {
-                [lang]: req.body.hero.cta.path
+              description: {
+                [lang]: req.body.pageMeta.description
               }
             }
           })
-          .then(button => {
-            return space.createUpload({
-              file: fs.readFileSync(fullPath)
-            })
-            .then(upload => {
-              return environment.createAsset({
-                fields: {
-                  title: {
-                    [lang]: req.body.hero.image.alt
-                  },
-                  file: {
-                    [lang]: {
-                      contentType: req.body.hero.image.file.contentType,
-                      fileName: req.body.hero.image.file.fileName,
-                      uploadFrom: {
-                        sys: {
-                          type: 'Link',
-                          linkType: 'Upload',
-                          id: upload.sys.id
-                        }
-                      }
-                    }
-                  }
-                }
-              })
-              .then(asset => {
-                return asset.processForAllLocales()
-                .then(asset => {
-                  return asset.update()
-                })
-                .then(() => {
-                  console.log('create hero button', button.sys.id);
-                  console.log('create hero image', asset.sys.id);
-                  return environment.createEntry('hero', {
-                    fields: {
-                      title: {
-                        [lang]: req.body.hero.title
-                      },
-                      subtitle: {
-                        [lang]: req.body.hero.subtitle
-                      },
-                      cta: {
-                        [lang]: {
-                          sys: {
-                            type: 'Link',
-                            linkType: 'Entry',
-                            id: button.sys.id
-                          }
-                        }
-                      },
-                      image: {
-                        [lang]: {
-                          sys: {
-                            type: 'Link',
-                            linkType: 'Asset',
-                            id: asset.sys.id
-                          }
-                        }
-                      }
-                    }
-                  })
-                  .then(hero => {
-                    // Now add the rest of the page
-                    return environment.createEntry('pages', {
+          .then(pageMeta => {
+            return space.getEntry(pageMeta.sys.id)
+              .then(entry => {
+                return entry.publish()
+                  .then(() => {
+                    return environment.createEntry('button', {
                       fields: {
                         title: {
-                          [lang]: req.body.title
+                          [lang]: req.body.hero.cta.title
                         },
-                        subtitle: {
-                          [lang]: req.body.subtitle
-                        },
-                        slug: {
-                          [lang]: req.body.slug
-                        },
-                        mainNavigation: {
-                          [lang]: req.body.navigation
-                        },
-                        description: {
-                          [lang]: req.body.description
-                        },
-                        order: {
-                          [lang]: req.body.order
-                        },
-                        pageMeta: {
-                          [lang]: {
-                            sys: {
-                              type: 'Link',
-                              linkType: 'Entry',
-                              id: pageMeta.sys.id
-                            }
-                          }
-                        },
-                        hero: {
-                          [lang]: {
-                            sys: {
-                              type: 'Link',
-                              linkType: 'Entry',
-                              id: hero.sys.id
-                            }
-                          }
+                        path: {
+                          [lang]: req.body.hero.cta.path
                         }
                       }
                     })
+                    .then(button => {
+                      return space.getEntry(button.sys.id)
+                        .then(entry => {
+                          return entry.publish()
+                            .then(() => {
+                              return space.createUpload({
+                                file: fs.readFileSync(fullPath)
+                              })
+                              .then(upload => {
+                                return environment.createAsset({
+                                  fields: {
+                                    title: {
+                                      [lang]: req.body.hero.title
+                                    },
+                                    file: {
+                                      [lang]: {
+                                        contentType: req.body.hero.image.file.contentType,
+                                        fileName: req.body.hero.image.file.fileName,
+                                        uploadFrom: {
+                                          sys: {
+                                            type: 'Link',
+                                            linkType: 'Upload',
+                                            id: upload.sys.id
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                })
+                                .then(asset => {
+                                  return asset.processForAllLocales()
+                                  .then(asset => {
+                                    return asset.publish()
+                                  })
+                                  .then(() => {
+                                    return environment.createEntry('hero', {
+                                      fields: {
+                                        title: {
+                                          [lang]: req.body.hero.title
+                                        },
+                                        subtitle: {
+                                          [lang]: req.body.hero.subtitle
+                                        },
+                                        cta: {
+                                          [lang]: {
+                                            sys: {
+                                              type: 'Link',
+                                              linkType: 'Entry',
+                                              id: button.sys.id
+                                            }
+                                          }
+                                        },
+                                        image: {
+                                          [lang]: {
+                                            sys: {
+                                              type: 'Link',
+                                              linkType: 'Asset',
+                                              id: asset.sys.id
+                                            }
+                                          }
+                                        }
+                                      }
+                                    })
+                                    .then(hero => {
+                                      return space.getEntry(hero.sys.id)
+                                        .then(entry => {
+                                          return entry.publish()
+                                            .then(() => {
+                                              // Now add the rest of the page
+                                              return environment.createEntry('pages', {
+                                                fields: {
+                                                  title: {
+                                                    [lang]: req.body.title
+                                                  },
+                                                  subtitle: {
+                                                    [lang]: req.body.subtitle
+                                                  },
+                                                  slug: {
+                                                    [lang]: req.body.slug
+                                                  },
+                                                  mainNavigation: {
+                                                    [lang]: req.body.navigation
+                                                  },
+                                                  description: {
+                                                    [lang]: req.body.description
+                                                  },
+                                                  order: {
+                                                    [lang]: 4
+                                                  },
+                                                  pageMeta: {
+                                                    [lang]: {
+                                                      sys: {
+                                                        type: 'Link',
+                                                        linkType: 'Entry',
+                                                        id: pageMeta.sys.id
+                                                      }
+                                                    }
+                                                  },
+                                                  hero: {
+                                                    [lang]: {
+                                                      sys: {
+                                                        type: 'Link',
+                                                        linkType: 'Entry',
+                                                        id: hero.sys.id
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              })
+                                            })
+                                        })
+                                    })
+                                  })
+                                })
+                              })
+                            })
+                        })
+                    })
                   })
-                })
               })
-            })
           })
         })
-      })
     })
     .then(created => {
-      console.log('created', created.fields);
       return res.status(200).json({
         metadata: {
           version: created.sys.version,
