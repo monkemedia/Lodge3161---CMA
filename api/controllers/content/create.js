@@ -108,47 +108,52 @@ exports.createData = (req, res, next) => {
                                         .then(entry => {
                                           return entry.publish()
                                             .then(() => {
-                                              // Now add the rest of the page
-                                              return environment.createEntry('pages', {
-                                                fields: {
-                                                  title: {
-                                                    [lang]: req.body.title
-                                                  },
-                                                  subtitle: {
-                                                    [lang]: req.body.subtitle
-                                                  },
-                                                  slug: {
-                                                    [lang]: req.body.slug
-                                                  },
-                                                  mainNavigation: {
-                                                    [lang]: req.body.navigation
-                                                  },
-                                                  description: {
-                                                    [lang]: req.body.description
-                                                  },
-                                                  order: {
-                                                    [lang]: 4
-                                                  },
-                                                  pageMeta: {
-                                                    [lang]: {
-                                                      sys: {
-                                                        type: 'Link',
-                                                        linkType: 'Entry',
-                                                        id: pageMeta.sys.id
-                                                      }
-                                                    }
-                                                  },
-                                                  hero: {
-                                                    [lang]: {
-                                                      sys: {
-                                                        type: 'Link',
-                                                        linkType: 'Entry',
-                                                        id: hero.sys.id
-                                                      }
-                                                    }
-                                                  }
-                                                }
+                                              return space.getEntries({
+                                                content_type: 'pages'
                                               })
+                                                .then(pages => {
+                                                  // Now add the rest of the page
+                                                  return environment.createEntry('pages', {
+                                                    fields: {
+                                                      title: {
+                                                        [lang]: req.body.title
+                                                      },
+                                                      subtitle: {
+                                                        [lang]: req.body.subtitle
+                                                      },
+                                                      slug: {
+                                                        [lang]: req.body.slug
+                                                      },
+                                                      mainNavigation: {
+                                                        [lang]: req.body.navigation
+                                                      },
+                                                      description: {
+                                                        [lang]: req.body.description
+                                                      },
+                                                      order: {
+                                                        [lang]: pages.total
+                                                      },
+                                                      pageMeta: {
+                                                        [lang]: {
+                                                          sys: {
+                                                            type: 'Link',
+                                                            linkType: 'Entry',
+                                                            id: pageMeta.sys.id
+                                                          }
+                                                        }
+                                                      },
+                                                      hero: {
+                                                        [lang]: {
+                                                          sys: {
+                                                            type: 'Link',
+                                                            linkType: 'Entry',
+                                                            id: hero.sys.id
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  })
+                                                })
                                             })
                                         })
                                     })
