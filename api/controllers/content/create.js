@@ -175,7 +175,11 @@ exports.createData = (req, res, next) => {
           publishedVersion: created.sys.publishedVersion,
           updatedAt: created.sys.updatedAt
         },
-        message: 'This page has been created'
+        message: 'This page has been created',
+        data: {
+          title: created.fields.title[lang],
+          id: created.sys.id
+        }
       })
     })
     .catch(err => {
