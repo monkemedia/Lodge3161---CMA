@@ -20,7 +20,8 @@ exports.fetchData = (req, res, next) => {
           version: entry.sys.version,
           publishedVersion: entry.sys.publishedVersion,
           updatedAt: entry.sys.updatedAt,
-          id: entry.sys.id
+          id: entry.sys.id,
+          type: entry.sys.contentType.sys.id
         },
         fields: entry.fields
       });
