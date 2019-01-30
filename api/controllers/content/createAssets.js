@@ -40,6 +40,7 @@ exports.createAsset = (req, res, next) => {
         })
       })
       .catch(err => {
+        console.log(err);
         res.status(500).send({ error: err })
       })
   }
@@ -84,7 +85,6 @@ exports.createAsset = (req, res, next) => {
         return asset.update()
       })
       .then(published => {
-        const title = published.fields.title[lang]
         const url = published.fields.file[lang].url
         const fileName = published.fields.file[lang].fileName
         const contentType = published.fields.file[lang].contentType
@@ -93,7 +93,6 @@ exports.createAsset = (req, res, next) => {
 
         return space.getAsset(entryId)
           .then(asset => {
-            asset.fields.title[lang] = title
             asset.fields.file[lang].url = url
             asset.fields.file[lang].fileName = fileName
             asset.fields.file[lang].contentType = contentType

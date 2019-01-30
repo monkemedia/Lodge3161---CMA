@@ -41,7 +41,8 @@ exports.fetchData = (req, res, next) => {
           title: it.fields.title['en-GB'],
           path: it.fields.slug['en-GB'],
           id: it.sys.id,
-          subLinks: sublinks(it.fields)
+          subLinks: sublinks(it.fields),
+          isDraggable: it.fields.slug['en-GB'] !== 'home' ? true : false
         }
       })
 

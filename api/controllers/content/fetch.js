@@ -21,12 +21,13 @@ exports.fetchData = (req, res, next) => {
           publishedVersion: entry.sys.publishedVersion,
           updatedAt: entry.sys.updatedAt,
           id: entry.sys.id,
-          type: entry.sys.contentType.sys.id
+          type: entry.sys.contentType ? entry.sys.contentType.sys.id : null
         },
         fields: entry.fields
-      });
+      })
     })
     .catch(err => {
+      console.log(err);
       res.status(500).send({ error: err })
     });
 };
