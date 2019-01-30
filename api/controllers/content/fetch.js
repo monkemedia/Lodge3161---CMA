@@ -3,6 +3,7 @@ exports.fetchData = (req, res, next) => {
   const client = require(appRoot + '/utils/initClient.js')
   const entryId = req.query.entryId
   const isAsset = req.query.asset === 'true' ? true : false
+  const lang = process.env.LOCALE
 
   client.initClient(req, res)
     .then(space => {

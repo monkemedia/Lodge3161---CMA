@@ -22,13 +22,15 @@ exports.fetchData = (req, res, next) => {
             for (let i = 0; i < fields[key]['en-GB'].length; i++) {
               newArray.push({
                 title: `${key} ${i + 1}`,
-                id: fields[key]['en-GB'][i].sys.id
+                id: fields[key]['en-GB'][i].sys.id,
+                path: `/templates/${fields.slug['en-GB']}`,
               })
             }
           } else if (fields[key]['en-GB'].sys) {
             newArray.push({
               title: key,
-              id: fields[key]['en-GB'].sys.id
+              id: fields[key]['en-GB'].sys.id,
+              path: `/templates/${fields.slug['en-GB']}`,
             })
           }
         })
@@ -39,10 +41,12 @@ exports.fetchData = (req, res, next) => {
       const items = entry.items.map(it => {
         return {
           title: it.fields.title['en-GB'],
-          path: it.fields.slug['en-GB'],
+          path: `/templates/${it.fields.slug['en-GB']}`,
+          name: it.fields.slug['en-GB'],
           id: it.sys.id,
           subLinks: sublinks(it.fields),
-          isDraggable: it.fields.slug['en-GB'] !== 'home' ? true : false
+          isDraggable: it.fields.slug['en-GB'] !== 'homepage' ? true : false,
+          isParent: true
         }
       })
 
