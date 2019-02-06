@@ -30,7 +30,7 @@ exports.fetchData = (req, res, next) => {
             newArray.push({
               title: key,
               id: fields[key]['en-GB'].sys.id,
-              path: `/templates/${fields.slug['en-GB']}`,
+              path: `/templates/${fields.slug['en-GB']}`
             })
           }
         })
@@ -46,7 +46,7 @@ exports.fetchData = (req, res, next) => {
           id: it.sys.id,
           subLinks: sublinks(it.fields),
           isDraggable: it.fields.slug['en-GB'] !== 'homepage' ? true : false,
-          isParent: true
+          isParent: sublinks(it.fields).length > 0
         }
       })
 
