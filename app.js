@@ -50,6 +50,7 @@ app.use('/api/v1/fetch', contentRoutes)
 app.use('/api/v1/update', contentRoutes)
 app.use('/api/v1/create', contentRoutes)
 app.use('/api/v1/delete', contentRoutes)
+app.use('/api/v1/userProfile', contentRoutes)
 
 app.use((req, res, next) => {
   const error = new Error('Not found')

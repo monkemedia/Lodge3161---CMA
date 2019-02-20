@@ -7,13 +7,17 @@ const updateController = require('../controllers/content/update.js')
 const createController = require('../controllers/content/create.js')
 const assetsController = require('../controllers/content/createAssets.js')
 const deleteController = require('../controllers/content/deletePage.js')
+const userProfileController = require('../controllers/content/fetchUserProfile.js')
 
 router.get('/', fetchController.fetchData)
 router.get('/all', fetchAllController.fetchData)
+router.get('/fetch/:userId', userProfileController.fetchData)
+
 router.put('/', updateController.updateData)
+
 router.post('/', createController.createData)
 router.post('/asset', assetsController.createAsset)
-router.delete('/', deleteController.deletePage)
 
+router.delete('/', deleteController.deletePage)
 
 module.exports = router
