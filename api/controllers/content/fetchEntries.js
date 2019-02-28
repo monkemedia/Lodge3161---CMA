@@ -1,22 +1,21 @@
-const appRoot = require('app-root-path')
-const client = require(appRoot + '/utils/initClient.js')
-const lang = process.env.LOCALE
-
 exports.fetchData = (req, res, next) => {
+  const appRoot = require('app-root-path')
+  const client = require(appRoot + '/utils/initClient.js')
   const entryId = req.query.entryId
-  const isAsset = req.query.asset === 'true' ? true : false
+  const params = req.query
+
+  console.log(req.query)
 
   client.initClient(req, res)
     .then(space => {
       return space.getEnvironment('master')
     })
     .then(environment => {
-      if (isAsset) {
-        return environment.getAsset(entryId)
-      }
-      return environment.getEntry(entryId)
+      return environment.getEntries(params)
     })
-    .then(entry => {
+    .then(entries => {
+      const entry = entries.items[0]
+
       return res.status(200).json({
         metadata: {
           version: entry.sys.version,
@@ -29,7 +28,6 @@ exports.fetchData = (req, res, next) => {
       })
     })
     .catch(err => {
-      console.log(err);
       res.status(500).send({ error: err })
     });
 };

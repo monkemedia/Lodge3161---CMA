@@ -6,8 +6,8 @@ const fs = require('fs')
 const lang = process.env.LOCALE
 
 exports.createAsset = (req, res, next) => {
-  const url = req.body.file.url
-  const title = req.body.title
+  const url = req.body.file[lang].url
+  const title = req.body.title[lang]
   const entryId = req.query.entryId
   const isPublishable = req.query.publishable === 'true' ? true : false
 
@@ -45,8 +45,8 @@ exports.createAsset = (req, res, next) => {
       })
   }
 
-  const contentType = req.body.file.contentType
-  const fileName = req.body.file.fileName  
+  const contentType = req.body.file[lang].contentType
+  const fileName = req.body.file[lang].fileName  
   const base = base64ToImage(url, appRoot + '/public/uploads/')
   const fullPath = path.resolve(appRoot + '/public/uploads/' + base.fileName)
 

@@ -8,7 +8,12 @@ exports.getUser = async (req, res, next) => {
 
   try {
     let getCurrentUser = await client.getCurrentUser()
-    return res.status(200).json(getCurrentUser)
+
+    console.log(getCurrentUser.sys)
+
+    return res.status(200).json({
+      userId: getCurrentUser.sys.id
+    })
   } catch(err) {
     const error = JSON.parse(err.message)
     return res.status(error.status).send(error)
