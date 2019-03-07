@@ -13,25 +13,19 @@ exports.updateData = (req, res, next) => {
       return environment.getEntry(entryId)
     })
     .then(entry => {
-      // console.log(entry)
       Object.keys(req.body).forEach((key) => {
         if (entry.fields[key] === undefined || req.body[key] === null) return
 
         entry.fields[key] = req.body[key]
       })
 
-      console.log(entry)
 
       if (isPublishable) {
-        return entry.update()
-          .then(() => {
-            return entry.publish()
-          })
+        return entry.publish()
       }
       return entry.update()
     })
     .then(updated => {
-      console.log(updated)
       return res.status(200).json({
         metadata: {
           version: updated.sys.version,

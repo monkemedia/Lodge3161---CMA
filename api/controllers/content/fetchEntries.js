@@ -4,8 +4,6 @@ exports.fetchData = (req, res, next) => {
   const entryId = req.query.entryId
   const params = req.query
 
-  console.log(req.query)
-
   client.initClient(req, res)
     .then(space => {
       return space.getEnvironment('master')

@@ -14,21 +14,21 @@ exports.fetchData = (req, res, next) => {
       })
     })
     .then(entry => {
-      function sublinks (fields) {
+      function children (fields) {
         const newArray = []
 
         Object.keys(fields).forEach((key) => {
           if (Array.isArray(fields[key]['en-GB'])) {
             for (let i = 0; i < fields[key]['en-GB'].length; i++) {
               newArray.push({
-                title: `${key} ${i + 1}`,
+                name: `${key} ${i + 1}`,
                 id: fields[key]['en-GB'][i].sys.id,
                 path: `/templates/${fields.slug['en-GB']}`,
               })
             }
           } else if (fields[key]['en-GB'].sys) {
             newArray.push({
-              title: key,
+              name: key,
               id: fields[key]['en-GB'].sys.id,
               path: `/templates/${fields.slug['en-GB']}`
             })
@@ -40,19 +40,15 @@ exports.fetchData = (req, res, next) => {
 
       const items = entry.items.map(it => {
         return {
-          title: it.fields.title['en-GB'],
           path: `/templates/${it.fields.slug['en-GB']}`,
           name: it.fields.slug['en-GB'],
           id: it.sys.id,
-          subLinks: sublinks(it.fields),
-          isDraggable: it.fields.slug['en-GB'] !== 'homepage' ? true : false,
-          isParent: sublinks(it.fields).length > 0
+          children: children(it.fields),
+          isActive: false
         }
       })
 
-      return res.status(200).json({
-        data: items
-      });
+      return res.status(200).json(items);
     })
     .catch(err => {
       res.status(500).send({ error: err })

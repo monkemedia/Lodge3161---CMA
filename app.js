@@ -8,6 +8,7 @@ const userRoutes = require('./api/routes/user.js')
 const authRoutes = require('./api/routes/auth.js')
 
 const contentRoutes = require('./api/routes/content.js')
+const pagesRoutes = require('./api/routes/pages.js')
 
 const cors = require('cors')
 
@@ -50,6 +51,8 @@ app.use('/api/v1/fetch', contentRoutes)
 app.use('/api/v1/update', contentRoutes)
 app.use('/api/v1/create', contentRoutes)
 app.use('/api/v1/delete', contentRoutes)
+
+app.use('/api/v1/pages', pagesRoutes)
 app.use('/api/v1/userProfile', contentRoutes)
 
 app.use((req, res, next) => {
