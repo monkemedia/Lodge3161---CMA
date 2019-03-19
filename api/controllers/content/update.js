@@ -6,8 +6,6 @@ exports.updateData = (req, res, next) => {
   const isPublishable = req.query.publishable === 'true'
   const isUpdateAndPublish = req.query.isUpdateAndPublish === 'true'
 
-  console.log('req.body', req.body)
-
   client.initClient(req, res)
     .then(space => {
       return space.getEnvironment('master')
