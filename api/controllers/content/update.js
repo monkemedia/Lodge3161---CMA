@@ -3,7 +3,10 @@ exports.updateData = (req, res, next) => {
   const client = require(appRoot + '/utils/initClient.js')
   const lang = process.env.LOCALE
   const entryId = req.query.entryId
-  const isPublishable = req.query.publishable === 'true' ? true : false
+  const isPublishable = req.query.publishable === 'true'
+  const isUpdateAndPublish = req.query.isUpdateAndPublish === 'true'
+
+  console.log('req.body', req.body)
 
   client.initClient(req, res)
     .then(space => {
@@ -13,15 +16,19 @@ exports.updateData = (req, res, next) => {
       return environment.getEntry(entryId)
     })
     .then(entry => {
-      Object.keys(req.body).forEach((key) => {
+      Object.keys(req.body.fields).forEach((key) => {
         if (entry.fields[key] === undefined || req.body[key] === null) return
 
-        entry.fields[key] = req.body[key]
+        entry.fields[key][lang] = req.body.fields[key]
       })
-
 
       if (isPublishable) {
         return entry.publish()
+      } else if (isUpdateAndPublish) {
+        return entry.update()
+          .then(updatedEntry => {
+            return updatedEntry.publish()
+          })
       }
       return entry.update()
     })
