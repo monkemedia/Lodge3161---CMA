@@ -17,7 +17,7 @@ exports.updateData = (req, res, next) => {
       Object.keys(req.body.fields).forEach((key) => {
         if (entry.fields[key] === undefined || req.body[key] === null) return
 
-        entry.fields[key][lang] = req.body.fields[key]
+        entry.fields[key][lang] = req.body.fields[key][lang]
       })
 
       if (isPublishable) {
