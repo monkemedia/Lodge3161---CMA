@@ -12,6 +12,13 @@ exports.fetchData = (req, res, next) => {
       return environment.getEntries(params)
     })
     .then(entries => {
+      if (entries && entries.items.length < 1) {
+        throw {
+          status: 204,
+          message: 'Content cannot be found.'
+        }
+      }
+
       const entry = entries.items[0]
 
       return res.status(200).json({
@@ -26,6 +33,6 @@ exports.fetchData = (req, res, next) => {
       })
     })
     .catch(err => {
-      res.status(500).send({ error: err })
+      res.status(err.status).send({ error: err.message })
     });
 };

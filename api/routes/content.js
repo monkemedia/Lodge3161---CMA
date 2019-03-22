@@ -6,6 +6,7 @@ const fetchEntriesController = require('../controllers/content/fetchEntries.js')
 const updateController = require('../controllers/content/update.js')
 const createController = require('../controllers/content/create.js')
 const assetsController = require('../controllers/content/createAssets.js')
+const profileController = require('../controllers/content/createProfile.js')
 const deleteController = require('../controllers/content/deletePage.js')
 
 router.get('/', fetchController.fetchData)
@@ -15,6 +16,7 @@ router.put('/', updateController.updateData)
 
 router.post('/', createController.createData)
 router.post('/asset', assetsController.createAsset)
+router.post('/profile', profileController.createProfile)
 
 router.delete('/', deleteController.deletePage)
 
