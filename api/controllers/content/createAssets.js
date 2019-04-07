@@ -9,7 +9,8 @@ exports.createAsset = (req, res, next) => {
   const url = req.body.file[lang].url
   const title = req.body.title[lang]
   const entryId = req.query.entryId
-  const isPublishable = req.query.publishable === 'true' ? true : false
+  const isPublishable = req.query.publishable === 'true'
+  const isUpdateAndPublish = req.query.isUpdateAndPublish === 'true'
 
   // If user updates title ONLY
   if (url.includes('images.ctfassets.net')) {
@@ -99,6 +100,11 @@ exports.createAsset = (req, res, next) => {
 
             if (isPublishable) {
               return asset.publish()
+            } else if (isUpdateAndPublish) {
+              return asset.update()
+                .then(updatedAsset => {
+                  return updatedAsset.publish()
+                })
             }
             return asset.update()
           })

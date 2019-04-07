@@ -9,8 +9,6 @@ exports.getUser = async (req, res, next) => {
   try {
     let getCurrentUser = await client.getCurrentUser()
 
-    console.log(getCurrentUser.sys)
-
     return res.status(200).json({
       userId: getCurrentUser.sys.id
     })

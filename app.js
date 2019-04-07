@@ -9,6 +9,7 @@ const authRoutes = require('./api/routes/auth.js')
 
 const contentRoutes = require('./api/routes/content.js')
 const pagesRoutes = require('./api/routes/pages.js')
+const blogRoutes = require('./api/routes/blog.js')
 
 const cors = require('cors')
 
@@ -54,6 +55,10 @@ app.use('/api/v1/delete', contentRoutes)
 
 app.use('/api/v1/pages', pagesRoutes)
 app.use('/api/v1/userProfile', contentRoutes)
+
+app.use('/api/v1/blog/create', blogRoutes)
+app.use('/api/v1/blog/fetch', blogRoutes)
+app.use('/api/v1/blog/update', blogRoutes)
 
 app.use((req, res, next) => {
   const error = new Error('Not found')
