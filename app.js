@@ -56,9 +56,7 @@ app.use('/api/v1/delete', contentRoutes)
 app.use('/api/v1/pages', pagesRoutes)
 app.use('/api/v1/userProfile', contentRoutes)
 
-app.use('/api/v1/blog/create', blogRoutes)
-app.use('/api/v1/blog/fetch', blogRoutes)
-app.use('/api/v1/blog/update', blogRoutes)
+app.use('/api/v1/blog', blogRoutes)
 
 app.use((req, res, next) => {
   const error = new Error('Not found')

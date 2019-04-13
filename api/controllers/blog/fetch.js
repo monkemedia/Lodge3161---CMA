@@ -36,7 +36,7 @@ exports.fetchData = (req, res, next) => {
       })
     })
     .catch(err => {
-      console.log("err", err);
+      console.log("err blog", err);
       res.status(err.status).send({ error: err })
     });
 };

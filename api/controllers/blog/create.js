@@ -3,8 +3,8 @@ exports.createData = (req, res, next) => {
   const path = require('path')
   const client = require(appRoot + '/utils/initClient.js')
   const lang = process.env.LOCALE
-  const url = req.body.media.file[lang].url
-  const fileName = req.body.media.file[lang].fileName
+  const url = req.body.media.file.url
+  const fileName = req.body.media.file.fileName
   const base64ToImage = require('base64-to-image')
   const base = base64ToImage(url, appRoot + '/public/uploads/')
   const fullPath = path.resolve(appRoot + '/public/uploads/' + base.fileName)
@@ -25,8 +25,8 @@ exports.createData = (req, res, next) => {
                 },
                 file: {
                   [lang]: {
-                    contentType: req.body.media.file[lang].contentType,
-                    fileName: req.body.media.file[lang].fileName,
+                    contentType: req.body.media.file.contentType,
+                    fileName: req.body.media.file.fileName,
                     uploadFrom: {
                       sys: {
                         type: 'Link',
@@ -49,7 +49,7 @@ exports.createData = (req, res, next) => {
                             [lang]: req.body.title
                           },
                           description: {
-                            [lang]: req.body.fields.description
+                            [lang]: req.body.description
                           },
                           image: {
                             [lang]: {
