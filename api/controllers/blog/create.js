@@ -51,6 +51,12 @@ exports.createData = (req, res, next) => {
                           description: {
                             [lang]: req.body.description
                           },
+                          authorId: {
+                            [lang]: req.body.authorId
+                          },
+                          tags: {
+                            [lang]: req.body.tags
+                          },
                           image: {
                             [lang]: {
                               sys: {

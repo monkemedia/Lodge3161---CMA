@@ -16,6 +16,7 @@ exports.updateData = (req, res, next) => {
     .then(entry => {
       entry.fields.title[lang] = req.body.title
       entry.fields.description[lang] = req.body.description
+      entry.fields.tags[lang] = req.body.tags
 
 
       if (isPublishable) {
@@ -39,6 +40,7 @@ exports.updateData = (req, res, next) => {
       })
     })
     .catch(err => {
+      console.log(err)
       res.status(500).send({ error: err })
     })
 }

@@ -19,7 +19,7 @@ exports.getToken = async (req, res, next) => {
     }
 
     return res.status(500).send({ 
-      error: 'Whoops! You\'ve entered an incorrect email address or password. Please check your details and try again' 
+      message: 'Whoops! You\'ve entered an incorrect email address or password. Please check your details and try again' 
     })
   } catch(err) {
     return res.status(500).send({ error: err.data })
